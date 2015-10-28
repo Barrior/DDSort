@@ -33,6 +33,8 @@
 
 ##### ● 详细API
 > DDSort方法只接受一个JSON对象类型的参数，以下是对这个参数的描述。
+
+
 <table width="65%" cellspacing="0" style="border-collapse: collapse;">
 <tbody>
 	<tr style="background-color: ##F3F3F3;">
