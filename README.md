@@ -45,7 +45,7 @@
 	<tr>
 		<td>target</td>
 		<td>string</td>
-		<td>插件内部使用的是jQuery的on方法绑定的事件，此参数就是on方法上的选择器字符串</td>
+		<td>可选，插件内部使用的是jQuery的on方法绑定的事件，此参数就是on方法上的选择器字符串，默认'li'</td>
 	</tr>
 	<tr>
 		<td>cloneStyle</td>

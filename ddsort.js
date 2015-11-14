@@ -4,7 +4,7 @@
 	 * 
 	 * DDSort: drag and drop sorting.
 	 * @param {Object} options
-	 *        target[string]: 		jQuery事件委托选择器字符串
+	 *        target[string]: 		可选，jQuery事件委托选择器字符串，默认'li'
 	 *        cloneStyle[object]: 	可选，设置占位符元素的样式
 	 *        floatStyle[object]: 	可选，设置拖动元素的样式
 	 *        down[function]: 		可选，鼠标按下时执行的函数
@@ -43,7 +43,7 @@
 			width = 'outerWidth';
 		}
 
-		return this.on( 'mousedown.DDSort', options.target, function( e ){
+		return this.on( 'mousedown.DDSort', options.target || 'li', function( e ){
 			var tagName = e.target.tagName.toLowerCase();
 			if( tagName == 'input' || tagName == 'textarea' || tagName == 'select' ){
 				return;
@@ -60,8 +60,25 @@
 					.css( 'height', $this[ height ]() )
 					.empty(),
 					
-				hasClone = 1;
+				hasClone = 1,
+
+				parentLeft = 0,
+				parentTop = parentLeft,
+				offsetParent = THIS.offsetParent,
+				parentOffset,
+
+				//缓存计算
+				thisOuterHeight = $this.outerHeight();
 			
+			/**
+			 * 处理定位父级不是body的情况
+			 */
+			if( offsetParent.tagName.toLowerCase() != 'body' ){
+				parentOffset = $( offsetParent ).offset();
+				parentLeft = parentOffset.left;
+				parentTop = parentOffset.top;
+			}
+
 			fnDown.call( THIS );
 			
 			$doc.on( 'mousemove.DDSort', function( e ){
@@ -73,9 +90,9 @@
 						
 					hasClone = 0;
 				}
-				
-				var left = e.pageX - disX,
-					top = e.pageY - disY,
+
+				var left = e.pageX - disX - parentLeft,
+					top = e.pageY - disY - parentTop,
 					
 					prev = clone.prev(),
 					next = clone.next();
@@ -85,11 +102,11 @@
 					top: top
 				});
 				
-				if( prev.length && top < prev.offset().top + prev.outerHeight()/2 ){
+				if( prev.length && top < prev.offset().top + prev.outerHeight()/2 - parentTop ){
 						
 					clone.after( prev );
 					
-				}else if( next.length && top > next.offset().top - next.outerHeight()/2 ){
+				}else if( next.length && top + thisOuterHeight > next.offset().top + next.outerHeight()/2 - parentTop ){
 					
 					clone.before( next );
 				}
