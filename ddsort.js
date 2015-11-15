@@ -12,8 +12,10 @@
 	 *        up[function]: 		可选，鼠标抬起时执行的函数
 	 */
 	$.fn.DDSort = function( options ){
-		var $doc = $( document ),
+		var that = this,
+			$doc = $( document ),
 			fnEmpty = function(){},
+			options = options || {},
 			fnDown = options.down || fnEmpty,
 			fnMove = options.move || fnEmpty,
 			fnUp = options.up || fnEmpty,
@@ -26,7 +28,8 @@
 			
 			floatStyle = $.extend({
 				
-				'position': 'absolute',
+				//用固定定位可以防止定位父级不是Body的情况的兼容处理，表示不兼容IE6，无妨
+				'position': 'fixed',
 				'box-shadow': '10px 10px 20px 0 #eee',
 				'webkitTransform': 'rotate(4deg)',
 				'mozTransform': 'rotate(4deg)',
@@ -38,12 +41,12 @@
 			height = 'height',
 			width = 'width';
 
-		if( this.css( 'box-sizing' ) == 'border-box' ){
+		if( that.css( 'box-sizing' ) == 'border-box' ){
 			height = 'outerHeight';
 			width = 'outerWidth';
 		}
 
-		return this.on( 'mousedown.DDSort', options.target || 'li', function( e ){
+		return that.on( 'mousedown.DDSort', options.target || 'li', function( e ){
 			var tagName = e.target.tagName.toLowerCase();
 			if( tagName == 'input' || tagName == 'textarea' || tagName == 'select' ){
 				return;
@@ -62,23 +65,14 @@
 					
 				hasClone = 1,
 
-				parentLeft = 0,
-				parentTop = parentLeft,
-				offsetParent = THIS.offsetParent,
-				parentOffset,
-
 				//缓存计算
-				thisOuterHeight = $this.outerHeight();
-			
-			/**
-			 * 处理定位父级不是body的情况
-			 */
-			if( offsetParent.tagName.toLowerCase() != 'body' ){
-				parentOffset = $( offsetParent ).offset();
-				parentLeft = parentOffset.left;
-				parentTop = parentOffset.top;
-			}
+				thisOuterHeight = $this.outerHeight(),
+				thatOuterHeight = that.outerHeight(),
 
+				//滚动速度
+				upSpeed = 4,
+				downSpeed = 4;
+			
 			fnDown.call( THIS );
 			
 			$doc.on( 'mousemove.DDSort', function( e ){
@@ -91,8 +85,8 @@
 					hasClone = 0;
 				}
 
-				var left = e.pageX - disX - parentLeft,
-					top = e.pageY - disY - parentTop,
+				var left = e.pageX - disX,
+					top = e.pageY - disY,
 					
 					prev = clone.prev(),
 					next = clone.next();
@@ -102,15 +96,43 @@
 					top: top
 				});
 				
-				if( prev.length && top < prev.offset().top + prev.outerHeight()/2 - parentTop ){
+				//向上排序
+				if( prev.length && top < prev.offset().top + prev.outerHeight()/2 ){
 						
 					clone.after( prev );
 					
-				}else if( next.length && top + thisOuterHeight > next.offset().top + next.outerHeight()/2 - parentTop ){
+				//向下排序
+				}else if( next.length && top + thisOuterHeight > next.offset().top + next.outerHeight()/2 ){
 					
 					clone.before( next );
+
 				}
-				
+
+				/**
+				 * 处理滚动条
+				 * that是带着滚动条的元素，这里默认以为that元素是这样的元素（正常情况就是这样），如果使用者事件委托的元素不是这样的元素，那么需要提供接口出来
+				 */
+				var thatScrollTop = that.scrollTop(),
+					thatOffsetTop = that.offset().top,
+					scrollVal;
+
+				//向上滚动
+				if( top < thatOffsetTop ){
+
+					downSpeed = 4;
+					upSpeed = ++upSpeed > 10 ? 10 : upSpeed;
+					scrollVal = thatScrollTop - upSpeed;
+
+				//向下滚动
+				}else if( top + thisOuterHeight - thatOffsetTop > thatOuterHeight ){
+
+					upSpeed = 4;
+					downSpeed = ++downSpeed > 10 ? 10 : downSpeed;
+					scrollVal = thatScrollTop + downSpeed;
+				}
+
+				that.scrollTop( scrollVal );
+
 				fnMove.call( THIS );
 			});
 			
