@@ -47,6 +47,12 @@
 		}
 
 		return that.on( 'mousedown.DDSort', options.target || 'li', function( e ){
+			//只允许鼠标左键拖动
+			if( e.which != 1 ){
+				return;
+			}
+			
+			//防止表单元素失效
 			var tagName = e.target.tagName.toLowerCase();
 			if( tagName == 'input' || tagName == 'textarea' || tagName == 'select' ){
 				return;
@@ -70,8 +76,9 @@
 				thatOuterHeight = that.outerHeight(),
 
 				//滚动速度
-				upSpeed = 4,
-				downSpeed = 4;
+				upSpeed = thisOuterHeight,
+				downSpeed = thisOuterHeight,
+				maxSpeed = thisOuterHeight * 3;
 			
 			fnDown.call( THIS );
 			
@@ -89,7 +96,8 @@
 					top = e.pageY - disY,
 					
 					prev = clone.prev(),
-					next = clone.next();
+					//阻止next为托起的元素$this
+					next = clone.next().not( $this );
 				
 				$this.css({
 					left: left,
@@ -119,15 +127,15 @@
 				//向上滚动
 				if( top < thatOffsetTop ){
 
-					downSpeed = 4;
-					upSpeed = ++upSpeed > 10 ? 10 : upSpeed;
+					downSpeed = thisOuterHeight;
+					upSpeed = ++upSpeed > maxSpeed ? maxSpeed : upSpeed;
 					scrollVal = thatScrollTop - upSpeed;
 
 				//向下滚动
 				}else if( top + thisOuterHeight - thatOffsetTop > thatOuterHeight ){
 
-					upSpeed = 4;
-					downSpeed = ++downSpeed > 10 ? 10 : downSpeed;
+					upSpeed = thisOuterHeight;
+					downSpeed = ++downSpeed > maxSpeed ? maxSpeed : downSpeed;
 					scrollVal = thatScrollTop + downSpeed;
 				}
 

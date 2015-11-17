@@ -24,15 +24,16 @@
 2、依次引入jquery.js和ddsort.js，然后使用DDSort API实现如图拖放排序效果：
 
 	$( '#wrap' ).DDSort({
-		target: 'li',
-		floatStyle: {
+		target: 'li',			//示例而用，默认即'li'
+		floatStyle: {			//示例二用，默认有一定的样式
 			'border': '1px solid #ccc',
 			'background-color': '#fff'
 		}
 	});
+3、如果拖放列表带有滚动条，那么$( '#wrap' )要是这个滚动条的元素。
 
 ##### ● 详细API
-> DDSort方法只接受一个JSON对象类型的参数，以下是对这个参数的描述。
+> DDSort方法接受一个JSON对象类型的参数，以下是对这个参数的描述。
 
 
 <table width="65%" cellspacing="0" style="border-collapse: collapse;">
