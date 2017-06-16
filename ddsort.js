@@ -98,7 +98,7 @@
                         var next = clone.next().not($this);
 
                         $this.css({
-                            left: left,
+                            left: left - $doc.scrollLeft(),
 
                             // 超出首屏减去页面滚动条高度
                             top: top - $doc.scrollTop()
@@ -139,7 +139,7 @@
 
                         that.scrollTop(scrollVal);
 
-                        settings.move.call(self, left, top - $doc.scrollTop());
+                        settings.move.call(self, left - $doc.scrollLeft(), top - $doc.scrollTop());
                     })
                     .on('mouseup.DDSort', function () {
 
