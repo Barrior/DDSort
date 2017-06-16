@@ -50,6 +50,11 @@
 		<td>可选，插件内部使用的是 `jQuery`的 `on` 方法绑定的事件，此参数就是 `on` 方法上的选择器字符串，默认'li'</td>
 	</tr>
 	<tr>
+		<td>delay</td>
+		<td>number</td>
+		<td>可选，延迟拖拽，默认延时 100 毫秒</td>
+	</tr>
+	<tr>
 		<td>cloneStyle</td>
 		<td>object</td>
 		<td>可选，设置占位符元素的样式</td>
@@ -76,4 +81,8 @@
 	</tr>
 </tobdy>
 </table>
+
+##### ● Bootstrap 上的拖拽问题
+
+请参考 [demo_bootstrap.html](./demo_bootstrap.html)
 
