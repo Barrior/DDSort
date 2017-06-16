@@ -47,25 +47,37 @@
                 width = 'outerWidth';
             }
 
-            that.on('mousedown.DDSort', settings.target, function (e) {
+            that.on('mousedown.DDSort touchstart.DDSort', settings.target, function (e) {
 
                 var startTime = new Date().getTime();
 
-                // 只允许鼠标左键拖动
-                if (e.which != 1) return;
+                // 桌面端只允许鼠标左键拖动
+                if (e.type == 'mousedown' && e.which != 1) return;
 
-                // 防止表单元素失效
+                // 防止表单元素，a 链接，可编辑元素失效
                 var tagName = e.target.tagName.toLowerCase();
                 if (tagName == 'input' || tagName == 'textarea' || tagName == 'select' ||
-                    $(e.target).prop('contenteditable') == 'true') {
+                    tagName == 'a' || $(e.target).prop('contenteditable') == 'true') {
                     return;
                 }
 
                 var self = this;
                 var $this = $(self);
                 var offset = $this.offset();
-                var disX = e.pageX - offset.left;
-                var disY = e.pageY - offset.top;
+
+                // 桌面端
+                var pageX = e.pageX;
+                var pageY = e.pageY;
+
+                // 移动端
+                var targetTouches = e.originalEvent.targetTouches;
+                if (e.type == 'touchstart' && targetTouches) {
+                    pageX = targetTouches[0].pageX;
+                    pageY = targetTouches[0].pageY;
+                }
+
+                var disX = pageX - offset.left;
+                var disY = pageY - offset.top;
 
                 var clone = $this.clone()
                         .css(settings.cloneStyle)
@@ -85,7 +97,18 @@
 
                 settings.down.call(self);
 
-                $doc.on('mousemove.DDSort', function (e) {
+                $doc.on('mousemove.DDSort touchmove.DDSort', function (e) {
+
+                    // 桌面端
+                    var pageX = e.pageX;
+                    var pageY = e.pageY;
+
+                    // 移动端
+                    var targetTouches = e.originalEvent.targetTouches;
+                    if (e.type == 'touchmove' && targetTouches) {
+                        pageX = targetTouches[0].pageX;
+                        pageY = targetTouches[0].pageY;
+                    }
 
                     if (new Date().getTime() - startTime < settings.delay) return;
 
@@ -98,8 +121,8 @@
                         hasClone = 0;
                     }
 
-                    var left = e.pageX - disX;
-                    var top = e.pageY - disY;
+                    var left = pageX - disX;
+                    var top = pageY - disY;
 
                     var prev = clone.prev();
                     var next = clone.next().not($this);
@@ -147,9 +170,9 @@
 
                     settings.move.call(self, left - $doc.scrollLeft(), top - $doc.scrollTop());
                 })
-                .on('mouseup.DDSort', function () {
+                .on('mouseup.DDSort touchend.DDSort', function () {
 
-                    $doc.off('mousemove.DDSort mouseup.DDSort');
+                    $doc.off('mousemove.DDSort mouseup.DDSort touchmove.DDSort touchend.DDSort');
 
                     // click 的时候也会触发 mouseup 事件，加上判断阻止这种情况
                     if (!hasClone) {
