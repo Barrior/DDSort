@@ -10,8 +10,8 @@
         }
 
         .wrap {
-            width: 400px;
-            height: 300px;
+            width: 600px;
+            height: 500px;
             margin: 200px auto;
             padding-top: 20px;
             border: 1px solid #ccc;
@@ -41,6 +41,11 @@
 
         div[contenteditable] {
             border: 1px solid #ececec;
+        }
+
+        img {
+            display: block;
+            width: 400px;
         }
     </style>
 </head>
@@ -94,6 +99,10 @@
                 <a href="http://music.163.com/">music.163.com</a>
             </li>
             <li>
+                图片测试：
+                <img src="img/ddsort.gif" alt="ddsort">
+            </li>
+            <li>
                 input element 测试：
                 <input type="text">
             </li>
@@ -108,7 +117,8 @@
     <script src="ddsort.js"></script>
     <script>
         $('.wrap').DDSort({
-            target: 'li',		// 示例而用，默认即 li
+            target: 'li',		// 示例而用，默认即 li，
+            delay: 100,         // 延时处理，默认为 50 ms，防止手抖点击 A 链接无效
             floatStyle: {
                 'border': '1px solid #ccc',
                 'background-color': '#fff'
