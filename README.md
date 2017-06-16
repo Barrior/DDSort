@@ -24,8 +24,12 @@
 2、依次引入 `jquery.js` 和 `ddsort.js`，然后使用 `DDSort API` 实现如图拖放排序效果：
 
     $( '.wrap' ).DDSort({
-        target: 'li',			// 示例而用，默认即'li'
-        floatStyle: {			// 示例而用，默认有一定的样式
+        
+        // 示例而用，默认即 li
+        target: 'li',
+
+        // 示例而用，默认有一定的样式    
+        floatStyle: {    
             'border': '1px solid #ccc',
             'background-color': '#fff'
         }
