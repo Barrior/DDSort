@@ -1,6 +1,6 @@
 # DDSort
 
-一个轻简的jQuery拖放排序插件。
+一个轻简的 jQuery 拖放排序插件。
 
 ##### ● 漂亮的UI展示：
 
@@ -9,10 +9,10 @@
 
 ##### ● 使用方法：
 
-1、假设Html结构如下：
+1、假设 `Html` 结构如下：
 
 
-	<div id="wrap">
+	<div class="wrap">
 		<ul>
 			<li>...</li>
 			<li>...</li>
@@ -21,24 +21,25 @@
 	</div>
 
 
-2、依次引入jquery.js和ddsort.js，然后使用DDSort API实现如图拖放排序效果：
+2、依次引入 `jquery.js` 和 `ddsort.js`，然后使用 `DDSort API` 实现如图拖放排序效果：
 
-	$( '#wrap' ).DDSort({
-		target: 'li',			//示例而用，默认即'li'
-		floatStyle: {			//示例二用，默认有一定的样式
+	$( '.wrap' ).DDSort({
+		target: 'li',			// 示例而用，默认即'li'
+		floatStyle: {			// 示例而用，默认有一定的样式
 			'border': '1px solid #ccc',
 			'background-color': '#fff'
 		}
 	});
-3、如果拖放列表带有滚动条，那么$( '#wrap' )要是这个滚动条的元素。
+	
+3、如果拖放列表带有滚动条，那么 `$( '.wrap' )` 要是这个滚动条的元素。
 
 ##### ● 详细API
-> DDSort方法接受一个JSON对象类型的参数，以下是对这个参数的描述。
+> `DDSort` 方法接受一个 `JSON` 对象类型的参数，以下是对这个参数的描述。
 
 
 <table width="65%" cellspacing="0" style="border-collapse: collapse;">
 <tbody>
-	<tr style="background-color: ##F3F3F3;">
+	<tr>
 		<td>参数列表</td>
 		<td>类型</td>
 		<td>描述</td>
@@ -46,7 +47,7 @@
 	<tr>
 		<td>target</td>
 		<td>string</td>
-		<td>可选，插件内部使用的是jQuery的on方法绑定的事件，此参数就是on方法上的选择器字符串，默认'li'</td>
+		<td>可选，插件内部使用的是 `jQuery`的 `on` 方法绑定的事件，此参数就是 `on` 方法上的选择器字符串，默认'li'</td>
 	</tr>
 	<tr>
 		<td>cloneStyle</td>
