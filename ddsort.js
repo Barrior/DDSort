@@ -1,15 +1,6 @@
 /**
- * Author: https://github.com/Barrior
- *
  * DDSort: drag and drop sorting.
- * @param {Object} options
- *        target[string]:        可选，jQuery 事件委托选择器字符串，默认 li
- *        delay[number]:         可选，延时拖拽，单位毫秒
- *        cloneStyle[object]:    可选，设置占位符元素的样式
- *        floatStyle[object]:    可选，设置拖动元素的样式
- *        down[function]:        可选，鼠标按下时执行的函数
- *        move[function]:        可选，鼠标移动时执行的函数
- *        up[function]:          可选，鼠标抬起时执行的函数
+ * Documentation: https://github.com/Barrior/DDSort
  */
 +function ($) {
     var defaultOptions = {
