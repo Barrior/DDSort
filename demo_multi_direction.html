@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>DDSort</title>
+    <style>
+        body {
+            margin: 0;
+            height: 2000px;
+        }
+
+        .wrap {
+            width: 800px;
+            height: 600px;
+            margin: 200px auto;
+            padding-top: 20px;
+            border: 1px solid #ccc;
+            overflow: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            font: 14px/1.5 "微软雅黑";
+            list-style: none;
+            cursor: move;
+            width: 150px;
+            height: 100px;
+            float: left;
+            overflow: hidden;
+        }
+
+        li:hover {
+            background-color: #f6f6f6;
+        }
+
+        div[contenteditable] {
+            border: 1px solid #ececec;
+        }
+
+        img {
+            display: block;
+            width: 400px;
+        }
+
+        @media all and (max-width: 767px) {
+            .wrap {
+                width: 300px;
+            }
+            img {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <ul>
+            <li>
+                世界上最美好的相遇是恰好，你洽好青春年少，我恰好青春芳华；
+                世界上最唯美的惊艳是偶然，你偶然出现，我偶然发现，
+                然后清纯的两颗心，慢慢地慢慢地靠近；
+            </li>
+            <li>
+                你飘逸的裙裾逶迤在我寂寞里飞马行空的诗行，<br>
+                跟随你的优雅舒缓的步履，
+            </li>
+            <li>
+                在相濡以沫心心相印的平凡日子里心香如故，<br>
+                刻写一个个浪漫和感动记忆的满面皱纹。
+            </li>
+            <li>
+                除了怀念，只剩怀念；<br>
+                除了无言，只能无言！
+            </li>
+            <li>
+                你飘逸的裙裾逶迤在我寂寞里飞马行空的诗行，<br>
+                跟随你的优雅舒缓的步履，
+            </li>
+            <li>
+                在相濡以沫心心相印的平凡日子里心香如故，<br>
+                刻写一个个浪漫和感动记忆的满面皱纹。
+            </li>
+            <li>
+                除了怀念，只剩怀念；<br>
+                除了无言，只能无言！
+            </li>
+            <li>
+                你飘逸的裙裾逶迤在我寂寞里飞马行空的诗行，<br>
+                跟随你的优雅舒缓的步履，
+            </li>
+            <li>
+                在相濡以沫心心相印的平凡日子里心香如故，<br>
+                刻写一个个浪漫和感动记忆的满面皱纹。
+            </li>
+            <li>
+                除了怀念，只剩怀念；<br>
+                除了无言，只能无言！
+            </li>
+            <li>一些事情，你愈是去遮掩愈是容易清晰，原本以为的瞒天过海，结果却是欲盖弥彰。</li>
+            <li>
+                A 链接测试：
+                <a href="http://music.163.com/">music.163.com</a>
+            </li>
+            <li>
+                图片测试：
+                <img src="img/ddsort.gif" alt="ddsort">
+            </li>
+            <li>
+                input element 测试：
+                <input type="text">
+            </li>
+            <li>
+                contenteditable element 测试：
+                <div contenteditable="true">一些内容，内容...</div>
+            </li>
+        </ul>
+    </div>
+
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="ddsort.js"></script>
+    <script>
+        $('.wrap').DDSort({
+            target: 'li',		// 示例而用，默认即 li，
+            delay: 100,         // 延时处理，默认为 50 ms，防止手抖点击 A 链接无效
+            floatStyle: {
+                'border': '1px solid #ccc',
+                'background-color': '#fff'
+            }
+        });
+    </script>
+</body>
+</html>
