@@ -86,6 +86,9 @@
 </tobdy>
 </table>
 
+##### ● 下载
+[Download](https://github.com/Barrior/DDSort/releases)
+
 ##### ● Bootstrap 上的拖拽问题
 
 请参考 [demo_bootstrap.html](./demo_bootstrap.html)
