@@ -78,10 +78,10 @@
                 var hasClone = 1;
 
                 // 缓存计算
-        	    var thisOuterHeight = $this.outerHeight(true),
-        	    	thisOuterWidth = $this.outerWidth(true),
-        	    	thatOuterHeight = that.outerHeight(true),
-        	    	thatOuterWidth = that.outerWidth(true);
+                var thisOuterHeight = $this.outerHeight(),
+                    thisOuterWidth = $this.outerWidth(),
+                    thatOuterHeight = that.outerHeight(),
+                    thatOuterWidth = that.outerWidth();
 
                 // 滚动速度
                 var upSpeed = thisOuterHeight;
@@ -118,9 +118,9 @@
                     var top = pageY - disY;
 
                     var $left = getLeft(clone),
-	    	        	$right = getRight(clone, $this),
-	    	        	$top = getTop(clone),
-	    	        	$under = getUnder(clone, $this);
+                        $right = getRight(clone, $this),
+                        $top = getTop(clone),
+                        $under = getUnder(clone, $this);
 
                     // 超出首屏减去页面滚动条高度或宽度
                     $this.css({
@@ -129,22 +129,22 @@
                     });
 
                     if ($top && $top.length && top < $top.offset().top + $top.outerHeight(true) / 2) {
-        	        	// 向上排序
-        	        	$top.before(clone);
-        	            
-        	        } else if ($under && $under.length && top + thisOuterHeight > $under.offset().top + $under.outerHeight(true) / 2) {
-        	        	// 向下排序
-        	        	$under.after(clone);
+                        // 向上排序
+                        $top.before(clone);
+                        
+                    } else if ($under && $under.length && top + thisOuterHeight > $under.offset().top + $under.outerHeight(true) / 2) {
+                        // 向下排序
+                        $under.after(clone);
 
-        	        } else if($left && $left.length && left < $left.offset().left + $left.outerWidth(true) / 2) {
-        	        	//向左排序
-        	        	$left.before(clone);
-        	        	
-        	        } else if($right && $right.length && left + thisOuterWidth > $right.offset().left + $right.outerWidth(true) / 2) {
-        	        	//向右排序
-        	        	$right.after(clone);
-        	        	
-        	        }
+                    } else if($left && $left.length && left < $left.offset().left + $left.outerWidth(true) / 2) {
+                        //向左排序
+                        $left.before(clone);
+                        
+                    } else if($right && $right.length && left + thisOuterWidth > $right.offset().left + $right.outerWidth(true) / 2) {
+                        //向右排序
+                        $right.after(clone);
+                        
+                    }
 
                     // 处理滚动条，that 是带着滚动条的元素，这里默认以为 that 元素是这样的元素（正常情况就是这样），
                     // 如果使用者事件委托的元素不是这样的元素，那么需要提供接口出来
@@ -188,57 +188,57 @@
     };
     
     
-	//允许计算误差
-	var deviation = 5;
-	
-	var getLeft = function (clone) {
-		var left = clone.prev();
-		if(left.length && clone.offset().top==left.offset().top) {
-			var _dev = Math.abs(clone.offset().left - (left.offset().left + left.outerWidth(true)));
-			if(_dev <= deviation) {
-				return left;
-			}
-		}
-		return undefined;
-	}
-	var getTop = function (clone, prev) {
-		if(!prev){
-			prev = clone.prev();
-		}
-		if(!prev.length) {
-			return undefined;
-		}
-		if(clone.offset().left==prev.offset().left) {
-			var _dev = Math.abs(clone.offset().top - (prev.offset().top+prev.outerHeight(true)));
-			if(_dev <= deviation) {
-				return prev;
-			}
-		}
-		return getTop(clone, prev.prev());
-	}
-	var getRight = function (clone, $this) {
-		var rigth = clone.next().not($this);
-		if(rigth.length && clone.offset().top==rigth.offset().top) {
-			var _dev = Math.abs(clone.offset().left - (rigth.offset().left-rigth.outerWidth(true)));
-			if(_dev <= deviation) {
-				return rigth;
-			}
-		}
-		return undefined;
-	}
-	var getUnder = function (clone, $this, next) {
-		if(!next){
-			next = clone.next().not($this);
-		}
-		if(!next.length) {
-			return undefined;
-		}
-		if(clone.offset().left==next.offset().left) {
-			var _dev = Math.abs(clone.offset().top - (next.offset().top-next.outerHeight(true)));
-			if(_dev <= deviation) {
-				return next;
-			}
-		}
-		return getUnder(clone, $this, next.next().not($this));
-	}
+    //允许计算误差
+    var deviation = 5;
+    
+    var getLeft = function (clone) {
+        var left = clone.prev();
+        if(left.length && clone.offset().top==left.offset().top) {
+            var _dev = Math.abs(clone.offset().left - (left.offset().left + left.outerWidth(true)));
+            if(_dev <= deviation) {
+                return left;
+            }
+        }
+        return undefined;
+    }
+    var getTop = function (clone, prev) {
+        if(!prev){
+            prev = clone.prev();
+        }
+        if(!prev.length) {
+            return undefined;
+        }
+        if(clone.offset().left==prev.offset().left) {
+            var _dev = Math.abs(clone.offset().top - (prev.offset().top+prev.outerHeight(true)));
+            if(_dev <= deviation) {
+                return prev;
+            }
+        }
+        return getTop(clone, prev.prev());
+    }
+    var getRight = function (clone, $this) {
+        var rigth = clone.next().not($this);
+        if(rigth.length && clone.offset().top==rigth.offset().top) {
+            var _dev = Math.abs(clone.offset().left - (rigth.offset().left-rigth.outerWidth(true)));
+            if(_dev <= deviation) {
+                return rigth;
+            }
+        }
+        return undefined;
+    }
+    var getUnder = function (clone, $this, next) {
+        if(!next){
+            next = clone.next().not($this);
+        }
+        if(!next.length) {
+            return undefined;
+        }
+        if(clone.offset().left==next.offset().left) {
+            var _dev = Math.abs(clone.offset().top - (next.offset().top-next.outerHeight(true)));
+            if(_dev <= deviation) {
+                return next;
+            }
+        }
+        return getUnder(clone, $this, next.next().not($this));
+    }
 }(jQuery);
