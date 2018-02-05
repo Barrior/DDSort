@@ -219,7 +219,7 @@
     var getRight = function (clone, $this) {
         var rigth = clone.next().not($this);
         if(rigth.length && clone.offset().top==rigth.offset().top) {
-            var _dev = Math.abs(clone.offset().left - (rigth.offset().left-rigth.outerWidth(true)));
+            var _dev = Math.abs(clone.offset().left - (rigth.offset().left-clone.outerWidth(true)));
             if(_dev <= deviation) {
                 return rigth;
             }
@@ -234,7 +234,7 @@
             return undefined;
         }
         if(clone.offset().left==next.offset().left) {
-            var _dev = Math.abs(clone.offset().top - (next.offset().top-next.outerHeight(true)));
+            var _dev = Math.abs(clone.offset().top - (next.offset().top-clone.outerHeight(true)));
             if(_dev <= deviation) {
                 return next;
             }
