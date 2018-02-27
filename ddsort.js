@@ -32,10 +32,6 @@
             var that = $(this);
             var height = 'height';
             var width = 'width';
-            
-            // 是否有滚动条
-            var haveScrollX = this.scrollWidth > this.clientWidth;
-            var haveScrollY = this.scrollHeight > this.clientHeight;
 
             if (that.css('box-sizing') == 'border-box') {
                 height = 'outerHeight';
@@ -158,41 +154,36 @@
 
                     // 处理滚动条，that 是带着滚动条的元素，这里默认以为 that 元素是这样的元素（正常情况就是这样），
                     // 如果使用者事件委托的元素不是这样的元素，那么需要提供接口出来
-                    if(haveScrollY) {
-                        var thatScrollTop = that.scrollTop();
-                        var thatOffsetTop = that.offset().top;
-
-                        if (top < thatOffsetTop) {
-                            // 向上滚动
-                            downSpeed = thisOuterHeight;
-                            upSpeed = ++upSpeed > maxSpeed ? maxSpeed : upSpeed;
-                            var scrollVal = thatScrollTop - upSpeed;
-                            that.scrollTop(scrollVal);
-                        } else if (top + thisOuterHeight - thatOffsetTop > thatOuterHeight) {
-                            // 向下滚动
-                            upSpeed = thisOuterHeight;
-                            downSpeed = ++downSpeed > maxSpeed ? maxSpeed : downSpeed;
-                            var scrollVal = thatScrollTop + downSpeed;
-                            that.scrollTop(scrollVal);
-                        }
+                    var thatScrollTop = that.scrollTop();
+                    var thatOffsetTop = that.offset().top;
+                    if (top < thatOffsetTop) {
+                        // 向上滚动
+                        downSpeed = thisOuterHeight;
+                        upSpeed = ++upSpeed > maxSpeed ? maxSpeed : upSpeed;
+                        var scrollVal = thatScrollTop - upSpeed;
+                        that.scrollTop(scrollVal);
+                    } else if (top + thisOuterHeight - thatOffsetTop > thatOuterHeight) {
+                        // 向下滚动
+                        upSpeed = thisOuterHeight;
+                        downSpeed = ++downSpeed > maxSpeed ? maxSpeed : downSpeed;
+                        var scrollVal = thatScrollTop + downSpeed;
+                        that.scrollTop(scrollVal);
                     }
-                    if(haveScrollX) {
-                        var thatScrollLeft = that.scrollLeft();
-                        var thatOffsetLeft = that.offset().left;
-                        
-                        if (left < that.offset().left) {
-                            // 向左滚动
-                            rightSpeed = thisOuterWidth;
-                            leftSpeed = ++leftSpeed > maxSpeed ? maxSpeed : leftSpeed;
-                            var scrollVal = thatScrollLeft - leftSpeed;
-                            that.scrollLeft(scrollVal);
-                        } else if (left + thisOuterWidth - thatOffsetLeft > thatOuterWidth) {
-                            // 向右滚动
-                            leftSpeed = thisOuterWidth;
-                            rightSpeed = ++rightSpeed > maxSpeed ? maxSpeed : rightSpeed;
-                            var scrollVal = thatScrollLeft + rightSpeed;
-                            that.scrollLeft(scrollVal);
-                        }
+
+                    var thatScrollLeft = that.scrollLeft();
+                    var thatOffsetLeft = that.offset().left;
+                    if (left < that.offset().left) {
+                        // 向左滚动
+                        rightSpeed = thisOuterWidth;
+                        leftSpeed = ++leftSpeed > maxSpeed ? maxSpeed : leftSpeed;
+                        var scrollVal = thatScrollLeft - leftSpeed;
+                        that.scrollLeft(scrollVal);
+                    } else if (left + thisOuterWidth - thatOffsetLeft > thatOuterWidth) {
+                        // 向右滚动
+                        leftSpeed = thisOuterWidth;
+                        rightSpeed = ++rightSpeed > maxSpeed ? maxSpeed : rightSpeed;
+                        var scrollVal = thatScrollLeft + rightSpeed;
+                        that.scrollLeft(scrollVal);
                     }
 
                     settings.move.call(self, left, top);
