@@ -32,6 +32,10 @@
             var that = $(this);
             var height = 'height';
             var width = 'width';
+            
+            // 是否有滚动条
+            var haveScrollX = this.scrollWidth > this.clientWidth;
+            var haveScrollY = this.scrollHeight > this.clientHeight;
 
             if (that.css('box-sizing') == 'border-box') {
                 height = 'outerHeight';
@@ -54,8 +58,10 @@
 
                 var self = this;
                 var $this = $(self);
+                // 鼠标按下时的元素偏移
                 var offset = $this.offset();
 
+                // 鼠标按下时的光标坐标
                 // 桌面端
                 var pageX = e.pageX;
                 var pageY = e.pageY;
@@ -66,9 +72,6 @@
                     pageX = targetTouches[0].pageX;
                     pageY = targetTouches[0].pageY;
                 }
-
-                var disX = pageX - offset.left;
-                var disY = pageY - offset.top;
 
                 var clone = $this.clone()
                         .css(settings.cloneStyle)
@@ -84,26 +87,31 @@
                     thatOuterWidth = that.outerWidth();
 
                 // 滚动速度
-                var upSpeed = thisOuterHeight;
-                var downSpeed = thisOuterHeight;
-                var maxSpeed = thisOuterHeight * 3;
+                var upSpeed = thisOuterHeight,
+                    downSpeed = thisOuterHeight,
+                    leftSpeed = thisOuterWidth,
+                    rightSpeed = thisOuterWidth,
+                    maxSpeed = thisOuterHeight * 3;
 
                 settings.down.call(self);
 
                 $doc.on('mousemove.DDSort touchmove.DDSort', function (e) {
 
+                    // 鼠标移动时的光标坐标
                     // 桌面端
-                    var pageX = e.pageX;
-                    var pageY = e.pageY;
+                    var _pageX = e.pageX;
+                    var _pageY = e.pageY;
 
                     // 移动端
                     var targetTouches = e.originalEvent.targetTouches;
                     if (e.type == 'touchmove' && targetTouches) {
-                        pageX = targetTouches[0].pageX;
-                        pageY = targetTouches[0].pageY;
+                        _pageX = targetTouches[0].pageX;
+                        _pageY = targetTouches[0].pageY;
                     }
 
-                    if (new Date().getTime() - startTime < settings.delay) return;
+                    if (new Date().getTime() - startTime < settings.delay) {
+                        return;
+                    }
 
                     if (hasClone) {
                         $this.before(clone)
@@ -114,19 +122,21 @@
                         hasClone = 0;
                     }
 
-                    var left = pageX - disX;
-                    var top = pageY - disY;
+                    var disX = pageX - _pageX;
+                    var disY = pageY - _pageY;
+                    var left = offset.left - disX;
+                    var top = offset.top - disY;
+                    
+                    $this.offset({
+                        left: left,
+                        top: top 
+                    });
 
                     var $left = getLeft(clone),
                         $right = getRight(clone, $this),
                         $top = getTop(clone),
                         $under = getUnder(clone, $this);
 
-                    // 超出首屏减去页面滚动条高度或宽度
-                    $this.css({
-                        left: left - $doc.scrollLeft(),
-                        top: top - $doc.scrollTop()
-                    });
 
                     if ($top && $top.length && top < $top.offset().top + $top.outerHeight(true) / 2) {
                         // 向上排序
@@ -148,28 +158,44 @@
 
                     // 处理滚动条，that 是带着滚动条的元素，这里默认以为 that 元素是这样的元素（正常情况就是这样），
                     // 如果使用者事件委托的元素不是这样的元素，那么需要提供接口出来
-                    var thatScrollTop = that.scrollTop();
-                    var thatOffsetTop = that.offset().top;
-                    var scrollVal;
+                    if(haveScrollY) {
+                        var thatScrollTop = that.scrollTop();
+                        var thatOffsetTop = that.offset().top;
 
-                    // 向上滚动
-                    if (top < thatOffsetTop) {
-
-                        downSpeed = thisOuterHeight;
-                        upSpeed = ++upSpeed > maxSpeed ? maxSpeed : upSpeed;
-                        scrollVal = thatScrollTop - upSpeed;
-
-                        // 向下滚动
-                    } else if (top + thisOuterHeight - thatOffsetTop > thatOuterHeight) {
-
-                        upSpeed = thisOuterHeight;
-                        downSpeed = ++downSpeed > maxSpeed ? maxSpeed : downSpeed;
-                        scrollVal = thatScrollTop + downSpeed;
+                        if (top < thatOffsetTop) {
+                            // 向上滚动
+                            downSpeed = thisOuterHeight;
+                            upSpeed = ++upSpeed > maxSpeed ? maxSpeed : upSpeed;
+                            var scrollVal = thatScrollTop - upSpeed;
+                            that.scrollTop(scrollVal);
+                        } else if (top + thisOuterHeight - thatOffsetTop > thatOuterHeight) {
+                            // 向下滚动
+                            upSpeed = thisOuterHeight;
+                            downSpeed = ++downSpeed > maxSpeed ? maxSpeed : downSpeed;
+                            var scrollVal = thatScrollTop + downSpeed;
+                            that.scrollTop(scrollVal);
+                        }
+                    }
+                    if(haveScrollX) {
+                        var thatScrollLeft = that.scrollLeft();
+                        var thatOffsetLeft = that.offset().left;
+                        
+                        if (left < that.offset().left) {
+                            // 向左滚动
+                            rightSpeed = thisOuterWidth;
+                            leftSpeed = ++leftSpeed > maxSpeed ? maxSpeed : leftSpeed;
+                            var scrollVal = thatScrollLeft - leftSpeed;
+                            that.scrollLeft(scrollVal);
+                        } else if (left + thisOuterWidth - thatOffsetLeft > thatOuterWidth) {
+                            // 向右滚动
+                            leftSpeed = thisOuterWidth;
+                            rightSpeed = ++rightSpeed > maxSpeed ? maxSpeed : rightSpeed;
+                            var scrollVal = thatScrollLeft + rightSpeed;
+                            that.scrollLeft(scrollVal);
+                        }
                     }
 
-                    that.scrollTop(scrollVal);
-
-                    settings.move.call(self, left - $doc.scrollLeft(), top - $doc.scrollTop());
+                    settings.move.call(self, left, top);
                 })
                 .on('mouseup.DDSort touchend.DDSort', function () {
 
